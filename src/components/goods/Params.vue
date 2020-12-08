@@ -16,7 +16,7 @@
           <span>选择商品分类：</span>
           <!-- 选择商品分类的级联选择框 -->
           <el-cascader
-            expand-trigger="hover"
+            props.expandTrigger="hover"
             :options="catelist"
             :props="cateProps"
             v-model="selectedCateKeys"
@@ -187,7 +187,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       catelist: [],
       // 级联选择框的配置对象
@@ -230,11 +230,11 @@ export default {
       // inputValue: ''
     }
   },
-  created() {
+  created () {
     this.getCateList()
   },
   methods: {
-    async getCateList() {
+    async getCateList () {
       const { data: res } = await this.$http.get('categories')
       if (res.meta.status !== 200) {
         return this.$message.error('获取商品分类失败')
@@ -243,15 +243,15 @@ export default {
       this.catelist = res.data
     },
     // 级联选择框选中项变化会触发
-    handleChange() {
+    handleChange () {
       this.getParamsData()
     },
     // Tab 页签点击时触发
-    handleTabClick() {
+    handleTabClick () {
       this.getParamsData()
     },
     // 获取参数的列表数据
-    async getParamsData() {
+    async getParamsData () {
       if (this.selectedCateKeys.length !== 3) {
         // 证明选中的不是 3 级分类
         this.selectedCateKeys = []
@@ -288,11 +288,11 @@ export default {
       }
     },
     // 监听添加对话框的关闭事件
-    addDialogClosed() {
+    addDialogClosed () {
       this.$refs.addFormRef.resetFields()
     },
     // 点击按钮，添加参数
-    addParams() {
+    addParams () {
       this.$refs.addFormRef.validate(async valid => {
         if (!valid) return false
         const { data: res } = await this.$http.post(
@@ -311,7 +311,7 @@ export default {
       })
     },
     // 点击按钮，展示修改参数的对话框
-    async showEditDialog(attrId) {
+    async showEditDialog (attrId) {
       // 查询当前参数的信息
       const { data: res } = await this.$http.get(
         `categories/${this.cateId}/attributes/${attrId}`,
@@ -328,11 +328,11 @@ export default {
       this.editDialogVisible = true
     },
     // 重置修改参数的表单
-    editDialogClosed() {
+    editDialogClosed () {
       this.$refs.editFormRef.resetFields()
     },
     // 点击按钮，修改参数信息
-    editParams() {
+    editParams () {
       this.$refs.editFormRef.validate(async valid => {
         if (!valid) return false
         const { data: res } = await this.$http.put(
@@ -351,7 +351,7 @@ export default {
       })
     },
     // 根据 ID 删除对应的参数项
-    async removeParams(attrId) {
+    async removeParams (attrId) {
       const confirmResult = await this.$confirm(
         '此操作将永久删除该参数, 是否继续?',
         '提示',
@@ -374,7 +374,7 @@ export default {
       this.getParamsData()
     },
     // 文本框失去焦点或 Enter
-    async handleInputConfirm(row) {
+    async handleInputConfirm (row) {
       if (row.inputValue.trim().length === 0) {
         row.inputValue = ''
         row.inputVisible = false
@@ -397,7 +397,7 @@ export default {
       this.saveAttrVals(row)
     },
     // 将对 attr_vals 的操作，保存到数据库
-    async saveAttrVals(row) {
+    async saveAttrVals (row) {
       const { data: res } = await this.$http.put(
         `categories/${this.cateId}/attributes/${row.attr_id}`,
         {
@@ -412,7 +412,7 @@ export default {
       this.$message.success('添加参数成功')
     },
     // 点击按钮展示输入文本框
-    showInput(row) {
+    showInput (row) {
       row.inputVisible = true
       // 让文本框自动获得焦点
       // $nextTick: 当页面上的元素被重新渲染之后，才会执行回调函数中的代码
@@ -421,14 +421,14 @@ export default {
       })
     },
     // 删除对应的参数和选项
-    handleClose(i, row) {
+    handleClose (i, row) {
       row.attr_vals.splice(i, 1)
       this.saveAttrVals(row)
     }
   },
   computed: {
     // 如果按钮需要被禁用，则返回 true，否则返回 false
-    isBtnDisabled() {
+    isBtnDisabled () {
       if (this.selectedCateKeys.length !== 3) {
         return true
       } else {
@@ -436,14 +436,14 @@ export default {
       }
     },
     // 当前选中的 3 级分类的 ID
-    cateId() {
+    cateId () {
       if (this.selectedCateKeys.length === 3) {
         return this.selectedCateKeys[2]
       }
       return null
     },
     // 动态计算标题的文本
-    titleText() {
+    titleText () {
       if (this.activeName === 'many') {
         return '动态参数'
       } else {

@@ -54,7 +54,7 @@
     <el-dialog title="修改地址" :visible.sync="addressVisible" width="50%" @close="addressDialogClosed">
       <el-form :model="addressForm" :rules="addressFormRules" ref="addFormRef" label-width="100px">
         <el-form-item label="省市区/县" prop="address1">
-          <el-cascader v-model="addressForm.address1"></el-cascader>
+          <el-cascader :options="cityData" v-model="addressForm.address1"></el-cascader>
         </el-form-item>
         <el-form-item label="详细地址" prop="address2">
           <el-input v-model="addressForm.address2"></el-input>
@@ -82,6 +82,8 @@
 
 <script>
 
+import cityData from './citydata'
+
 export default {
   data () {
     return {
@@ -103,7 +105,8 @@ export default {
         address2: [{ required: true, message: '请填写详细地址', trigger: 'blur' }]
       },
       progressVisible: false,
-      progressInfo: []
+      progressInfo: [],
+      cityData
     }
   },
   created () {
